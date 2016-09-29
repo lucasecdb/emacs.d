@@ -1,3 +1,8 @@
+;;
+;; INIT.EL FILE
+;;
+
+;; melpa
 (require 'package)
 
 (add-to-list 'package-archives
@@ -8,9 +13,13 @@
 
 (package-initialize)
 
+;; hide annoying gui modes
 (setq inhibit-startup-screen t)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
+(scroll-bar-mode -1)
+
+(setq default-tab-width 4)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -34,23 +43,5 @@
 (load-theme 'deep-thought)
 (set-cursor-color "#ffffff")
 
-(setq default-tab-width 4)
-
-(scroll-bar-mode -1)
-
-;; web-mode
-(add-to-list 'auto-mode-alist
-			 '("\\.jsx\\'" .
-			   (lambda()
-				 (web-mode)
-				 (smartparens-mode))))
-
-(add-hook 'html-mode-hook
-          (lambda ()
-			(web-mode)
-			(emmet-mode)
-            (set (make-local-variable 'sgml-basic-offset) 4)))
-
-(add-hook 'js-mode-hook
-		  (lambda ()
-			(smartparens-mode)))
+(load "~/.emacs.d/org.el")
+(load "~/.emacs.d/web.el")
