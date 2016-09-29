@@ -22,7 +22,7 @@
 	("7bf64a1839bf4dbc61395bd034c21204f652185d17084761a648251041b70233" default)))
  '(package-selected-packages
    (quote
-	(smartparens apache-mode go-mode org-bullets magit web-mode php-mode org linum-relative emmet-mode))))
+	(spacemacs-theme org-beautify-theme js2-mode flymake-jshint smartparens apache-mode go-mode org-bullets magit web-mode php-mode org linum-relative emmet-mode))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -39,7 +39,11 @@
 (scroll-bar-mode -1)
 
 ;; web-mode
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . js-mode))
+(add-to-list 'auto-mode-alist
+			 '("\\.jsx\\'" .
+			   (lambda()
+				 (web-mode)
+				 (smartparens-mode))))
 
 (add-hook 'html-mode-hook
           (lambda ()
@@ -49,6 +53,4 @@
 
 (add-hook 'js-mode-hook
 		  (lambda ()
-			(web-mode)
-			(emmet-mode)
 			(smartparens-mode)))
