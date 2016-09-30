@@ -1,0 +1,118 @@
+#+TITLE: Emacs configuration
+#+AUTHOR: Lucas Cordeiro
+
+* Default configs
+
+** Melpa
+
+Melpa repository
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+
+  (when (< emacs-major-version 24)
+    (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+#+END_SRC
+
+** Emacs custom-variables
+
+#+BEGIN_SRC emacs-lisp
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(custom-safe-themes
+     (quote
+      ("7bf64a1839bf4dbc61395bd034c21204f652185d17084761a648251041b70233" default)))
+   '(package-selected-packages
+     (quote
+      (spacemacs-theme org-beautify-theme js2-mode flymake-jshint smartparens apache-mode go-mode org-bullets magit web-mode php-mode org linum-relative emmet-mode))))
+
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(default ((t (:inherit nil :stipple nil :background "#000F14" :foreground "#fff" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "PfEd" :family "Source Code Pro for Powerline")))))
+#+END_SRC
+
+** Theme and display options
+
+Hide the menu bar, scroll bar and tool bar.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+END_SRC
+
+I like tabs to be 4 spaces wide.
+
+#+BEGIN_SRC emacs-lisp
+  (setq default-tab-width 4)
+#+END_SRC
+
+Theme and cursor color.
+
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'deep-thought)
+  (set-cursor-color "#ffffff")
+#+END_SRC
+
+* Web stuff
+
+** HTML
+
+Add emmet-mode for quick tag creation and web-mode, also, set indentation for 4 spaces.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'html-mode-hook
+            (lambda ()
+              (web-mode)
+              (emmet-mode)
+              (set (make-local-variable 'sgml-basic-offset) 4)))
+#+END_SRC
+
+
+** Javscript
+
+Set web-mode to jsx files, and smartparens-mode.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'auto-mode-alist
+               '("\\.jsx\\'" .
+                 (lambda()
+                   (web-mode)
+                   (smartparens-mode))))
+#+END_SRC
+
+Add js2-mode and smartparens-mode to common javascript files.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'js-mode-hook
+            (lambda ()
+              (js2-mode)
+              (smartparens-mode)))
+#+END_SRC
+
+* Org-mode
+
+** Display preferences
+
+Show bullets instead of asteriscs.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'org-bullets)
+
+  (add-hook 'org-mode-hook
+            (lambda()
+              (org-bullets-mode 1)))
+#+END_SRC
