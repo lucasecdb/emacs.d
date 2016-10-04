@@ -19,29 +19,6 @@ Melpa repository
   (package-initialize)
 #+END_SRC
 
-** Emacs custom-variables
-
-#+BEGIN_SRC emacs-lisp
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(custom-safe-themes
-     (quote
-      ("7bf64a1839bf4dbc61395bd034c21204f652185d17084761a648251041b70233" default)))
-   '(package-selected-packages
-     (quote
-      (spacemacs-theme org-beautify-theme js2-mode flymake-jshint smartparens apache-mode go-mode org-bullets magit web-mode php-mode org linum-relative emmet-mode))))
-
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(default ((t (:inherit nil :stipple nil :background "#000F14" :foreground "#fff" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 105 :width normal :foundry "PfEd" :family "Source Code Pro for Powerline")))))
-#+END_SRC
-
 ** Theme and display options
 
 Hide the menu bar, scroll bar and tool bar.
@@ -63,8 +40,23 @@ I like tabs to be 4 spaces wide.
 Theme and cursor color.
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'deep-thought)
+  (load-theme 'deep-thought t)
   (set-cursor-color "#ffffff")
+#+END_SRC
+
+Add my favorite font as the default one.
+
+#+BEGIN_SRC emacs-lisp
+  (set-face-attribute 'default nil :font "Source Code Pro for Powerline")
+  (set-face-attribute 'default nil :height 100)
+#+END_SRC
+
+** Encoding
+
+Prefer UTF-8 encoding for files
+
+#+BEGIN_SRC emacs-lisp
+  (prefer-coding-system 'utf-8)
 #+END_SRC
 
 * Web stuff
@@ -100,6 +92,18 @@ Add js2-mode and smartparens-mode to common javascript files.
   (add-hook 'js-mode-hook
             (lambda ()
               (js2-mode)
+              (smartparens-mode)))
+#+END_SRC
+
+* Languages
+
+** C++
+
+Add smartparens mode
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'c-mode-common-hook
+            (lambda()
               (smartparens-mode)))
 #+END_SRC
 
