@@ -40,15 +40,16 @@ I like tabs to be 4 spaces wide.
 Theme and cursor color.
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'deep-thought t)
+  (load-theme 'gruvbox t)
   (set-cursor-color "#ffffff")
 #+END_SRC
 
 Add my favorite font as the default one.
 
 #+BEGIN_SRC emacs-lisp
-  (set-face-attribute 'default nil :font "Source Code Pro for Powerline")
-  (set-face-attribute 'default nil :height 100)
+  (set-face-attribute 'default nil
+                      :font "Source Code Pro for Powerline"
+                      :height 105)
 #+END_SRC
 
 ** Encoding
@@ -58,6 +59,7 @@ Prefer UTF-8 encoding for files
 #+BEGIN_SRC emacs-lisp
   (prefer-coding-system 'utf-8)
 #+END_SRC
+
 
 * Web stuff
 
@@ -89,23 +91,30 @@ Set web-mode to jsx files, and smartparens-mode.
 Add js2-mode and smartparens-mode to common javascript files.
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'js-mode-hook
-            (lambda ()
-              (js2-mode)
-              (smartparens-mode)))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
+  (add-hook 'js2-mode-hook 'smartparens-mode)
 #+END_SRC
+
 
 * Languages
 
-** C++
+** C and derivates
 
 Add smartparens mode
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'c-mode-common-hook
-            (lambda()
-              (smartparens-mode)))
+  (add-hook 'c-mode-common-hook 'smartparens-mode)
 #+END_SRC
+
+** Elisp
+
+Auto add smartparens mode
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'lisp-mode 'smartparens-mode)
+#+END_SRC
+
 
 * Org-mode
 
@@ -119,4 +128,10 @@ Show bullets instead of asteriscs.
   (add-hook 'org-mode-hook
             (lambda()
               (org-bullets-mode 1)))
+#+END_SRC
+
+Show utf-8 characters
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-pretty-entities t)
 #+END_SRC
