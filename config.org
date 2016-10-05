@@ -60,6 +60,16 @@ Prefer UTF-8 encoding for files
   (prefer-coding-system 'utf-8)
 #+END_SRC
 
+** Powerline
+
+Setup powerline and display
+
+#+BEGIN_SRC emacs-lisp
+  (require 'powerline)
+
+  (powerline-default-theme)
+#+END_SRC
+
 
 * Web stuff
 
@@ -74,7 +84,6 @@ Add emmet-mode for quick tag creation and web-mode, also, set indentation for 4 
               (emmet-mode)
               (set (make-local-variable 'sgml-basic-offset) 4)))
 #+END_SRC
-
 
 ** Javscript
 
@@ -109,10 +118,13 @@ Add smartparens mode
 
 ** Elisp
 
-Auto add smartparens mode
+Auto add smartparens mode and eldoc-mode
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'lisp-mode 'smartparens-mode)
+  (add-hook 'lisp-mode
+            (lambda()
+              (smartparens-mode)
+              (eldoc-mode)))
 #+END_SRC
 
 
@@ -135,3 +147,4 @@ Show utf-8 characters
 #+BEGIN_SRC emacs-lisp
   (setq org-pretty-entities t)
 #+END_SRC
+
