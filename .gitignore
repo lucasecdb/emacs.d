@@ -1,6 +1,10 @@
 elpa/
 auto-save-list/
 eshell/
+
 *.*~
 \#*\#
+
 config.el
+
+.org-id-locations
