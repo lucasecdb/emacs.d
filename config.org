@@ -148,3 +148,12 @@ Show utf-8 characters
   (setq org-pretty-entities t)
 #+END_SRC
 
+
+* =evil-mode=
+
+Setup evil mode
+
+#+BEGIN_SRC emacs-lisp
+  (require 'evil)
+  (evil-mode)
+#+END_SRC
