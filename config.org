@@ -2,6 +2,21 @@
 #+AUTHOR: Lucas Cordeiro
 
 * Default configs
+  
+** General
+
+Enable to answer yes/no questions with y/n
+
+#+BEGIN_SRC emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+*** Setup personal info
+
+#+BEGIN_SRC emacs-lisp
+  (setq user-full-name "Lucas Edi C. de Brito"
+        user-mail-address "ecdb.lucas@gmail.com")
+#+END_SRC
 
 ** Melpa
 
@@ -31,12 +46,6 @@ Hide the menu bar, scroll bar and tool bar.
   (scroll-bar-mode -1)
 #+END_SRC
 
-I like tabs to be 4 spaces wide.
-
-#+BEGIN_SRC emacs-lisp
-  (setq default-tab-width 4)
-#+END_SRC
-
 Theme and cursor color.
 
 #+BEGIN_SRC emacs-lisp
@@ -52,7 +61,7 @@ Add my favorite font as the default one.
                       :height 105)
 #+END_SRC
 
-** Encoding
+** File encoding
 
 Prefer UTF-8 encoding for files
 
@@ -60,14 +69,50 @@ Prefer UTF-8 encoding for files
   (prefer-coding-system 'utf-8)
 #+END_SRC
 
-** Powerline
+** Mode-line
 
 Setup powerline and display
 
 #+BEGIN_SRC emacs-lisp
   (require 'powerline)
 
-  (powerline-default-theme)
+  ;; (powerline-default-theme)
+#+END_SRC
+
+Setup mode-line colors to work with gruvbox theme
+
+#+BEGIN_SRC emacs-lisp
+  ;; (setq )
+#+END_SRC
+
+** Line number
+   
+Set global linum-relative-mode
+
+#+BEGIN_SRC emacs-lisp
+  (require 'linum-relative)
+
+  (global-linum-mode t)
+  (linum-relative-toggle)
+#+END_SRC
+
+Exclude specific modes from showing line numbers
+
+#+BEGIN_SRC emacs-lisp
+  (setq no-linum-modes-hook
+        '(dired-mode-hook
+          eshell-mode-hook
+          help-mode-hook))
+
+  (dolist (hook no-linum-modes-hook)
+    (add-hook hook 'disable-linum))
+#+END_SRC
+
+Helper function to disable linum-mode
+
+#+BEGIN_SRC emacs-lisp
+  (defun disable-linum ()
+    (linum-mode -1))
 #+END_SRC
 
 
@@ -90,41 +135,67 @@ Add emmet-mode for quick tag creation and web-mode, also, set indentation for 4 
 Set web-mode to jsx files, and smartparens-mode.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist
-               '("\\.jsx\\'" .
-                 (lambda()
-                   (web-mode)
-                   (smartparens-mode))))
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
 #+END_SRC
 
-Add js2-mode and smartparens-mode to common javascript files.
+Add js2-mode to common javascript files.
+Also, don't warn me for missing semicolons, please.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
-  (add-hook 'js2-mode-hook 'smartparens-mode)
+  (setq js2-strict-missing-semi-warning nil)
 #+END_SRC
 
 
 * Languages
 
-** C and derivates
-
-Add smartparens mode
+I like tabs to be 4 spaces wide.
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'c-mode-common-hook 'smartparens-mode)
+  (setq default-tab-width 4)
 #+END_SRC
 
-** Elisp
+** Smartparens
 
-Auto add smartparens mode and eldoc-mode
+Add smartparens to all of the following modes
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'lisp-mode
-            (lambda()
-              (smartparens-mode)
-              (eldoc-mode)))
+  (setq smarty-hooks
+        '(c-mode-common-hook
+          python-mode
+          web-mode
+          js2-mode-hook
+          go-mode))
+
+  (dolist (hook smarty-hooks)
+    (add-hook hook 'smartparens-mode))
+#+END_SRC
+
+** C and derivates
+
+Set the identation level to 4 spaces
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default c-basic-offset 4)
+#+END_SRC
+
+** Lisp
+
+Auto add smartparens mode and eldoc-mode to all lisp modes
+
+#+BEGIN_SRC emacs-lisp
+  (setq lispy-mode-hooks
+        '(clojure-mode-hook
+          emacs-lisp-mode-hook
+          lisp-mode-hook
+          scheme-mode-hook))
+
+  (dolist (hook lispy-mode-hooks)
+    (add-hook hook
+              (lambda()
+                (smartparens-mode)
+                (eldoc-mode))))
 #+END_SRC
 
 
