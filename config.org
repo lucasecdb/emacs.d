@@ -11,6 +11,12 @@ Enable to answer yes/no questions with y/n
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+END_SRC
 
+Fix up the "dead" keys.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'iso-transl)
+#+END_SRC
+
 *** Setup personal info
 
 #+BEGIN_SRC emacs-lisp
@@ -126,13 +132,14 @@ Add emmet-mode for quick tag creation and web-mode, also, set indentation for 4 
   (add-hook 'html-mode-hook
             (lambda ()
               (web-mode)
-              (emmet-mode)
               (set (make-local-variable 'sgml-basic-offset) 4)))
+            
+  (add-hook 'web-mode-hook 'emmet-mode)
 #+END_SRC
 
 ** Javscript
 
-Set web-mode to jsx files, and smartparens-mode.
+Set web-mode to jsx files.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
@@ -158,22 +165,14 @@ I like tabs to be 4 spaces wide.
 
 ** Smartparens
 
-Add smartparens to all of the following modes
+Add global smartparens mode
 
 #+BEGIN_SRC emacs-lisp
-  (setq smarty-hooks
-        '(c-mode-common-hook
-          python-mode
-          web-mode
-          js2-mode-hook
-          go-mode))
-
-  (dolist (hook smarty-hooks)
-    (add-hook hook 'smartparens-mode))
+  (smartparens-global-mode)
 #+END_SRC
 
 ** C and derivates
-
+   
 Set the identation level to 4 spaces
 
 #+BEGIN_SRC emacs-lisp
@@ -200,7 +199,7 @@ Auto add smartparens mode and eldoc-mode to all lisp modes
 
 
 * Org-mode
-
+  
 ** Display preferences
 
 Show bullets instead of asteriscs.
