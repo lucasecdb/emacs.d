@@ -31,10 +31,10 @@ Hide the menu bar, scroll bar and tool bar.
   (scroll-bar-mode -1)
 #+END_SRC
 
-I like tabs to be 4 spaces wide.
+I like tabs to be 2 spaces wide.
 
 #+BEGIN_SRC emacs-lisp
-  (setq default-tab-width 4)
+  (setq default-tab-width 2)
 #+END_SRC
 
 Theme and cursor color.
