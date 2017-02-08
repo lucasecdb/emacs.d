@@ -24,7 +24,7 @@ Fix up the "dead" keys.
         user-mail-address "ecdb.lucas@gmail.com")
 #+END_SRC
 
-** Melpa
+** Melpa and packages
 
 Melpa repository
 
@@ -36,6 +36,39 @@ Melpa repository
 
   (when (< emacs-major-version 24)
     (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
+#+END_SRC
+
+Ensure my packages are installed correctly
+
+#+BEGIN_SRC emacs-lisp
+  (defun ensure-package-installed (&rest packages)
+	"Assure every package is installed, ask for installation if it’s not.
+
+  Return a list of installed packages or nil for every skipped package."
+	(mapcar
+	 (lambda (package)
+       ;; (package-installed-p 'evil)
+       (if (package-installed-p package)
+           nil
+		 (if (y-or-n-p (format "Package %s is missing. Install it? " package))
+			 (package-install package)
+           package)))
+	 packages))
+
+  (or (file-exists-p package-user-dir)
+      (package-refresh-contents))
+
+  (ensure-package-installed
+   'gruvbox-theme
+   'evil
+   'magit
+   'linum-relative
+   'org
+   'org-bullets
+   'org-beautify-theme
+   'smartparens
+   'web-mode
+   'js2-mode)
 
   (package-initialize)
 #+END_SRC
@@ -69,8 +102,8 @@ Add my favorite font as the default one.
 
 #+BEGIN_SRC emacs-lisp
   (set-face-attribute 'default nil
-                      :font "Source Code Pro for Powerline"
-                      :height 105)
+                      :font "Operator Mono"
+                      :height 115)
 #+END_SRC
 
 ** File encoding
@@ -86,7 +119,7 @@ Prefer UTF-8 encoding for files
 Setup powerline and display
 
 #+BEGIN_SRC emacs-lisp
-  (require 'powerline)
+  ;; (require 'powerline)
 
   ;; (powerline-default-theme)
 #+END_SRC
@@ -158,6 +191,14 @@ Also, don't warn me for missing semicolons, please.
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
   (setq js2-strict-missing-semi-warning nil)
+#+END_SRC
+
+*** Flow
+
+Setup flow-type
+
+#+BEGIN_SRC emacs-lisp
+  (load-file "~/.emacs.d/flow-for-emacs/flow.el")
 #+END_SRC
 
 
