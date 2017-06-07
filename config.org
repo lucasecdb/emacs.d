@@ -24,7 +24,37 @@ Fix up the "dead" keys.
         user-mail-address "ecdb.lucas@gmail.com")
 #+END_SRC
 
-** Melpa and packages
+** Theme and display options
+
+Hide the menu bar, scroll bar and tool bar.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen t)
+
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+END_SRC
+
+Set tabs to be 4 spaces wide and highlight parenthesis.
+
+#+BEGIN_SRC emacs-lisp
+  (setq default-tab-width 4)
+  (show-paren-mode 1)
+#+END_SRC
+
+Theme, cursor color, and font.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'custom-theme-load-path (concat user-emacs-directory "themes"))
+  (load-theme 'gruvbox t)
+  (set-cursor-color "#ffffff")
+  (set-face-attribute 'default nil
+                      :font "Operator Mono"
+                      :height 115)
+#+END_SRC
+
+** Melpa
 
 Melpa repository
 
@@ -38,26 +68,28 @@ Melpa repository
     (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
 #+END_SRC
 
-Ensure my packages are installed correctly
+Ensure packages are installed correctly
 
 #+BEGIN_SRC emacs-lisp
   (defun ensure-package-installed (&rest packages)
-	"Assure every package is installed, ask for installation if it’s not.
-
+        "Assure every package is installed, ask for installation if it’s not.
   Return a list of installed packages or nil for every skipped package."
-	(mapcar
-	 (lambda (package)
-       ;; (package-installed-p 'evil)
-       (if (package-installed-p package)
-           nil
-		 (if (y-or-n-p (format "Package %s is missing. Install it? " package))
-			 (package-install package)
-           package)))
-	 packages))
+        (mapcar
+         (lambda (package)
+           (if (package-installed-p package)
+                   nil
+                 (package-install package)
+                 package))
+         packages))
 
-  (or (file-exists-p package-user-dir)
-      (package-refresh-contents))
+  (package-refresh-contents)
+#+END_SRC
 
+** Packages
+
+Installed packages
+
+#+BEGIN_SRC emacs-lisp
   (ensure-package-installed
    'gruvbox-theme
    'evil
@@ -68,42 +100,19 @@ Ensure my packages are installed correctly
    'org-beautify-theme
    'smartparens
    'web-mode
-   'js2-mode)
+   'js2-mode
+   'helm)
 
   (package-initialize)
 #+END_SRC
 
-** Theme and display options
+** =evil-mode=
 
-Hide the menu bar, scroll bar and tool bar.
-
-#+BEGIN_SRC emacs-lisp
-  (setq inhibit-startup-screen t)
-
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-#+END_SRC
-
-I like tabs to be 2 spaces wide.
+Setup evil mode
 
 #+BEGIN_SRC emacs-lisp
-  (setq default-tab-width 2)
-#+END_SRC
-
-Theme and cursor color.
-
-#+BEGIN_SRC emacs-lisp
-  (load-theme 'gruvbox t)
-  (set-cursor-color "#ffffff")
-#+END_SRC
-
-Add my favorite font as the default one.
-
-#+BEGIN_SRC emacs-lisp
-  (set-face-attribute 'default nil
-                      :font "Operator Mono"
-                      :height 115)
+  (require 'evil)
+  (evil-mode)
 #+END_SRC
 
 ** File encoding
@@ -114,54 +123,16 @@ Prefer UTF-8 encoding for files
   (prefer-coding-system 'utf-8)
 #+END_SRC
 
-** Mode-line
+** Helm
 
-Setup powerline and display
-
-#+BEGIN_SRC emacs-lisp
-  ;; (require 'powerline)
-
-  ;; (powerline-default-theme)
-#+END_SRC
-
-Setup mode-line colors to work with gruvbox theme
+Setup heml for better searching
 
 #+BEGIN_SRC emacs-lisp
-  ;; (setq )
-#+END_SRC
-
-** Line number
-   
-Set global linum-relative-mode
-
-#+BEGIN_SRC emacs-lisp
-  (require 'linum-relative)
-
-  (global-linum-mode t)
-  (linum-relative-toggle)
-#+END_SRC
-
-Exclude specific modes from showing line numbers
-
-#+BEGIN_SRC emacs-lisp
-  (setq no-linum-modes-hook
-        '(dired-mode-hook
-          eshell-mode-hook
-          help-mode-hook))
-
-  (dolist (hook no-linum-modes-hook)
-    (add-hook hook 'disable-linum))
-#+END_SRC
-
-Helper function to disable linum-mode
-
-#+BEGIN_SRC emacs-lisp
-  (defun disable-linum ()
-    (linum-mode -1))
+  (require 'helm-config)
 #+END_SRC
 
 
-* Web stuff
+* Language-specific
 
 ** HTML
 
@@ -178,14 +149,8 @@ Add emmet-mode for quick tag creation and web-mode, also, set indentation for 4 
 
 ** Javscript
 
-Set web-mode to jsx files.
-
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-#+END_SRC
-
 Add js2-mode to common javascript files.
-Also, don't warn me for missing semicolons, please.
+Also, disable warning for missing semicolons.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -198,16 +163,7 @@ Also, don't warn me for missing semicolons, please.
 Setup flow-type
 
 #+BEGIN_SRC emacs-lisp
-  (load-file "~/.emacs.d/flow-for-emacs/flow.el")
-#+END_SRC
-
-
-* Languages
-
-I like tabs to be 4 spaces wide.
-
-#+BEGIN_SRC emacs-lisp
-  (setq default-tab-width 4)
+  (load-file "~/.emacs.d/modules/flow/flow.el")
 #+END_SRC
 
 ** Smartparens
@@ -216,14 +172,6 @@ Add global smartparens mode
 
 #+BEGIN_SRC emacs-lisp
   (smartparens-global-mode)
-#+END_SRC
-
-** C and derivates
-   
-Set the identation level to 4 spaces
-
-#+BEGIN_SRC emacs-lisp
-  (setq-default c-basic-offset 4)
 #+END_SRC
 
 ** Lisp
@@ -265,12 +213,3 @@ Show utf-8 characters
   (setq org-pretty-entities t)
 #+END_SRC
 
-
-* =evil-mode=
-
-Setup evil mode
-
-#+BEGIN_SRC emacs-lisp
-  (require 'evil)
-  (evil-mode)
-#+END_SRC

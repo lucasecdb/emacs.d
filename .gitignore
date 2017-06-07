@@ -6,5 +6,8 @@ eshell/
 \#*\#
 
 config.el
+custom.el
 
 .org-id-locations
+
+network-security.data
